@@ -11,11 +11,47 @@
 <body>
 
 <div align = "center">
-	
+	<a href="login.jsp"target ="_self" > logout</a><br><br> 
 	<form action = "initialize">
 		<input type = "submit" value = "Initialize the Database"/>
 	</form>
-	<a href="login.jsp"target ="_self" > logout</a><br><br> 
+
+	
+	<form action = "Big clients">
+		<input type = "submit" value = "Big clients"/>
+	</form>
+	
+	<form action = "Easy clients">
+		<input type = "submit" value = "Easy clients"/>
+	</form>
+	
+	<form action = "One tree quotes">
+		<input type = "submit" value = "One tree quotes"/>
+	</form>
+	
+	<form action = "Prospective clients">
+		<input type = "submit" value = "Prospective clients"/>
+	</form>
+	
+	<form action = "Highest tree">
+		<input type = "submit" value = "Highest tree"/>
+	</form>
+	
+	<form action = "Overdue bills">
+		<input type = "submit" value = "Overdue bills"/>
+	</form>
+	
+	<form action = "Bad clients">
+		<input type = "submit" value = "Bad clients"/>
+	</form>
+	
+	<form action = "Good clients">
+		<input type = "submit" value = "Good clients"/>
+	</form>
+	
+	<form action = "Statistics">
+		<input type = "submit" value = "Statistics"/>
+	</form>
 
 <h1>List all users</h1>
     <div align="center">
