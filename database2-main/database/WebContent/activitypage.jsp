@@ -18,8 +18,8 @@
 	<a href="login.jsp"target ="_self" > logout</a><br><br> 
 </div>	
 	
-	
-    <center>
+	<div align="center">
+    
         <h1>Request a Quote</h1>
         <form action="submitQuote" method="post">
 
@@ -34,6 +34,16 @@
             
             <input type="submit" value="Submit Quote">
         </form>
-    </center>
+        
+        <h1>Pay a bill</h1>
+        <form action="payBill" method="post">
+        	<label for="bill">Payment Date:</label>
+        	<input type="datetime" id="paymentDate" name="date" required><br><br>
+        	
+        	<input type="submit" value="Submit Payment">
+        </form>
+        
+        </div>
+    
 </body>
 </html>
