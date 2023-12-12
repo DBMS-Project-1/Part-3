@@ -50,8 +50,8 @@ public class BillsDAO {
     
     public void updateBills(int id, Date paymentDate) throws SQLException {
     	connect_func("root", "pass1234");
-        System.out.println("I am hereee updateQuotes");
-        String query = "UPDATE Quotes SET paymentDate = ? WHERE id = ?";
+        System.out.println("I am hereee updateBills");
+        String query = "UPDATE Bills SET paymentDate = ? WHERE id = ?";
         try (PreparedStatement pstmt = connect.prepareStatement(query)) {
             pstmt.setTimestamp(1, new java.sql.Timestamp(paymentDate.getTime()));
             pstmt.setInt(2, id);
