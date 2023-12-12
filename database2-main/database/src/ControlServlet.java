@@ -164,7 +164,7 @@ public class ControlServlet extends HttpServlet {
 	    }
 	    
 	    
-	    
+	    //part 3 control servlet methods 
 	    private void BigClients(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException, SQLException {
 	        System.out.println("BigClients method");
 	        QuotesDAO quotesDAO = new QuotesDAO();
@@ -342,8 +342,6 @@ public class ControlServlet extends HttpServlet {
 	        System.out.println("listTree finished: 111111111111111111111111111111111111");
 	    }
 
-	    
-	    
 	    private void rootPage(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException, SQLException{
 	    	System.out.println("root view");
 			request.setAttribute("listUser", userDAO.listAllUsers());

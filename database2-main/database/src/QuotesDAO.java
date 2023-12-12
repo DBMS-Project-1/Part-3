@@ -147,7 +147,20 @@ public class QuotesDAO {
     }
 
     
+    public List<Integer> getOverdue() throws SQLException {
+    	List<Integer> overdueBills = new ArrayList<>();
+    	return overdueBills;
+    }
     
+    public List<Integer> getBadClients() throws SQLException {
+    	List<Integer> badClients = new ArrayList<>();
+    	return badClients;
+    }
+    
+    public List<Integer> getGoodClients() throws SQLException {
+    	List<Integer> goodClients = new ArrayList<>();
+    	return goodClients;
+    }
     
     
     
