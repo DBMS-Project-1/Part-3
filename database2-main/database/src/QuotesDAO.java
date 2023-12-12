@@ -150,8 +150,8 @@ public class QuotesDAO {
     public List<Integer> getOverdue() throws SQLException {
     	connect_func("root", "pass1234");
     	List<Integer> overdueBills = new ArrayList<>();
-    	String sql = "select Bills.id, Bills.billGeneratedDate as dateGenerated from Bills " +
-    			"where "
+    	//String sql = "select Bills.id, Bills.billGeneratedDate as dateGenerated from Bills " +
+    			
     	return overdueBills;
     }
     

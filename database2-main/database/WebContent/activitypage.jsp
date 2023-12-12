@@ -37,6 +37,8 @@
         
         <h1>Pay a bill</h1>
         <form action="payBill" method="post">
+        	<label for="bill">Bill ID:</label>
+        	<input type="number" id="billId" name="id" required><br><br>
         	<label for="bill">Payment Date:</label>
         	<input type="datetime" id="paymentDate" name="date" required><br><br>
         	
