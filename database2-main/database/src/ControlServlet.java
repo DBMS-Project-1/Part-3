@@ -111,55 +111,46 @@ public class ControlServlet extends HttpServlet {
     			
         		
  	    	case "/Big clients":
-        		userDAO.init();
         		System.out.println("Big clients clicked!");
         		BigClients(request,response,"");
         		break;
         		
  	    	case "/Easy clients":
-        		userDAO.init();
         		System.out.println("Easy clients clicked!");
         		EasyClients(request,response,"");
         		break;
         		
  	    	case "/Prospective clients":
-        		userDAO.init();
         		System.out.println("Prospective clients clicked!");
         		ProspectiveClients(request,response,"");
         		break;
         		
  	    	case "/One tree quotes":
-        		userDAO.init();
         		System.out.println("One tree quotes clicked!");
         		OneTreeQuotes(request,response,"");
         		break;
         		
  	    	case "/Highest tree":
-        		userDAO.init();
         		System.out.println("Highest tree clicked!");
         		HighestTree(request,response,"");
         		break;
         		
  	    	case "/Overdue bills":
-        		userDAO.init();
         		System.out.println("Overdue bills clicked!");
         		OverdueBills(request,response,"");
         		break;
         		
  	    	case "/Bad clients":
-        		userDAO.init();
         		System.out.println("Bad clients clicked!");
         		BadClients(request,response,"");
         		break;
         		
  	    	case "/Good clients":
-        		userDAO.init();
         		System.out.println("Good clients clicked!");
         		GoodClients(request,response,"");
         		break;
         		
  	    	case "/Statistics":
-        		userDAO.init();
         		System.out.println("Statistics clicked!");
         		Statistics(request,response,"");
         		break;
@@ -174,29 +165,49 @@ public class ControlServlet extends HttpServlet {
 	    
 	    
 	    
-	    private void BigClients(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException, SQLException{
-	    	System.out.println("BigClients method");
-	    	request.getRequestDispatcher("BigClients.jsp").forward(request, response);
+	    private void BigClients(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException, SQLException {
+	        System.out.println("BigClients method");
+	        QuotesDAO quotesDAO = new QuotesDAO();
+	        // Retrieve the list of top clients
+	        List<Integer> topClients = quotesDAO.getTopClients();
+	        System.out.println("List of Top Clients:");
+	        for (Integer clientId : topClients) {
+	            System.out.println("Client ID: " + clientId);
+	        }
+	        request.setAttribute("topClients", topClients);
+	        request.getRequestDispatcher("BigClients.jsp").forward(request, response);
 	    }
 	    
-	    private void EasyClients(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException, SQLException{
-	    	System.out.println("EasyClients Method");
-	    	request.getRequestDispatcher("EasyClients.jsp").forward(request, response);
+	    private void EasyClients(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException, SQLException {
+	        System.out.println("EasyClients Method");
+	        QuotesDAO quotesDAO = new QuotesDAO();
+	        List<Integer> easyClients = quotesDAO.getEasyClients();
+	        request.setAttribute("easyClients", easyClients);
+	        request.getRequestDispatcher("EasyClients.jsp").forward(request, response);
 	    }
-	    
-	    private void ProspectiveClients(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException, SQLException{
-	    	System.out.println("ProspectiveClients method");
-	    	request.getRequestDispatcher("ProspectiveClients.jsp").forward(request, response);
+
+	    private void ProspectiveClients(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException, SQLException {
+	        System.out.println("ProspectiveClients method");
+	        QuotesDAO quotesDAO = new QuotesDAO();
+	        List<Integer> prospectiveClients = quotesDAO.getProspectiveClients();
+	        request.setAttribute("prospectiveClients", prospectiveClients);
+	        request.getRequestDispatcher("ProspectiveClients.jsp").forward(request, response);
 	    }
-	    
-	    private void OneTreeQuotes(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException, SQLException{
-	    	System.out.println("OneTreeQuotes method");
-	    	request.getRequestDispatcher("OneTreeQuotes.jsp").forward(request, response);
+
+	    private void OneTreeQuotes(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException, SQLException {
+	        System.out.println("OneTreeQuotes method");
+	        QuotesDAO quotesDAO = new QuotesDAO();
+	        List<Integer> oneTreeQuotes = quotesDAO.getOneTreeQuotes();
+	        request.setAttribute("oneTreeQuotes", oneTreeQuotes);
+	        request.getRequestDispatcher("OneTreeQuotes.jsp").forward(request, response);
 	    }
-	    
-	    private void HighestTree(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException, SQLException{
-	    	System.out.println("HighestTree method");
-	    	request.getRequestDispatcher("HighestTree.jsp").forward(request, response);
+
+	    private void HighestTree(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException, SQLException {
+	        System.out.println("HighestTree method");
+	        QuotesDAO quotesDAO = new QuotesDAO();
+	        List<Integer> highestTrees = quotesDAO.getHighestTrees();
+	        request.setAttribute("highestTrees", highestTrees);
+	        request.getRequestDispatcher("HighestTree.jsp").forward(request, response);
 	    }
 	    
 	    private void OverdueBills(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException, SQLException{

@@ -21,6 +21,142 @@ public class QuotesDAO {
 
     }
 
+    
+    public List<Integer> getTopClients() throws SQLException {
+        connect_func("root", "pass1234"); 
+        List<Integer> topClients = new ArrayList<>();
+        String sql = "SELECT clientid, COUNT(*) AS treeCount " +
+                     "FROM Quotes INNER JOIN Trees ON Quotes.id = Trees.quoteid " +
+                     "WHERE contractorid = (SELECT id FROM Users WHERE firstname = 'David' AND lastname = 'Smith') " +
+                     "GROUP BY clientid " +
+                     "ORDER BY treeCount DESC;";
+
+        try (PreparedStatement ps = connect.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            int maxTreeCount = 0;
+            while (rs.next()) {
+                int treeCount = rs.getInt("treeCount");
+                if (maxTreeCount == 0) {
+                    maxTreeCount = treeCount;
+                }
+                if (treeCount == maxTreeCount) {
+                    topClients.add(rs.getInt("clientid"));
+                } else {
+                    break; // Since the results are ordered, no need to continue if count is less
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return topClients;
+    }
+
+    
+    
+    public List<Integer> getEasyClients() throws SQLException {
+        connect_func("root", "pass1234");
+        List<Integer> easyClients = new ArrayList<>();
+        String sql = "SELECT clientid FROM Quotes " +
+                     "WHERE contractorid = (SELECT id FROM Users WHERE firstname = 'David' AND lastname = 'Smith') " +
+                     "AND userAccept = TRUE AND userResponse IS NULL;";
+
+        try (PreparedStatement ps = connect.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                easyClients.add(rs.getInt("clientid"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return easyClients;
+    }
+
+    
+    public List<Integer> getOneTreeQuotes() throws SQLException {
+        connect_func("root", "pass1234");
+        List<Integer> oneTreeQuotes = new ArrayList<>();
+        String sql = "SELECT Quotes.id FROM Quotes " +
+                     "JOIN Trees ON Quotes.id = Trees.quoteid " +
+                     "WHERE userAccept = TRUE AND davidAccept = TRUE " +
+                     "GROUP BY Quotes.id HAVING COUNT(Trees.id) = 1;";
+
+        try (PreparedStatement ps = connect.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                oneTreeQuotes.add(rs.getInt("id"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return oneTreeQuotes;
+    }
+
+
+    public List<Integer> getProspectiveClients() throws SQLException {
+        connect_func("root", "pass1234");
+        List<Integer> prospectiveClients = new ArrayList<>();
+        String sql = "SELECT DISTINCT clientid FROM Quotes " +
+                     "WHERE clientid NOT IN (SELECT DISTINCT clientid FROM Quotes WHERE userAccept = TRUE);";
+
+        try (PreparedStatement ps = connect.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                prospectiveClients.add(rs.getInt("clientid"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return prospectiveClients;
+    }
+
+    public List<Integer> getHighestTrees() throws SQLException {
+        connect_func("root", "pass1234");
+        List<Integer> highestTrees = new ArrayList<>();
+        String sql = "SELECT Trees.id, MAX(height) AS maxHeight FROM Trees " +
+                     "JOIN Quotes ON Trees.quoteid = Quotes.id " +
+                     "WHERE contractorid = (SELECT id FROM Users WHERE firstname = 'David' AND lastname = 'Smith') " +
+                     "AND davidAccept = TRUE GROUP BY Trees.id;";
+
+        try (PreparedStatement ps = connect.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            double maxHeight = 0;
+            while (rs.next()) {
+                double height = rs.getDouble("maxHeight");
+                if (maxHeight < height) {
+                    highestTrees.clear();
+                    maxHeight = height;
+                }
+                if (height == maxHeight) {
+                    highestTrees.add(rs.getInt("id"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return highestTrees;
+    }
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     protected void connect_func() throws SQLException {
     	//uses default connection to the database
         if (connect == null || connect.isClosed()) {
