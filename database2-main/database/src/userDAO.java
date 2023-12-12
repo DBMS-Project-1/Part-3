@@ -324,7 +324,16 @@ public class userDAO
                 		"height DOUBLE," +
                         "distanceFromHouse DOUBLE," +
                 		"FOREIGN KEY (quoteid) references Quotes(id)" +
-                        ");")
+                        ");"),
+                ("CREATE TABLE if not exists Bills( " +
+                        "id integer auto_increment primary key, " +
+                		"quoteid integer," + 
+                        "amountDue double," + 
+                		"amountPaid double," +
+                        "paymentDate datetime," + 
+                		"billGeneratedDate datetime," + 
+                        "foreign key(quoteid) references Quotes(id)" +
+                		");")
                 
         };
 

@@ -148,6 +148,7 @@ public class QuotesDAO {
 
     
     public List<Integer> getOverdue() throws SQLException {
+    	connect_func("root", "pass1234");
     	List<Integer> overdueBills = new ArrayList<>();
     	return overdueBills;
     }
