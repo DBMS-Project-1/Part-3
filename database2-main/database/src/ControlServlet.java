@@ -28,6 +28,7 @@ public class ControlServlet extends HttpServlet {
 	    private userDAO userDAO = new userDAO();
 	    private TreesDAO TreesDAO = new TreesDAO();
 	    private QuotesDAO QuotesDAO = new QuotesDAO();
+	    private BillsDAO BillsDAO = new BillsDAO();
 	    private String currentUser;
 	    private HttpSession session=null;
 	    
@@ -85,6 +86,10 @@ public class ControlServlet extends HttpServlet {
     			System.out.println("The action is: insertQuote");
     			insertQuote(request,response);
     			break;
+ 	    	case "/payBill":
+ 	    		System.out.println("The action is: payBill");
+ 	    		payBill(request, response);
+ 	    		break;
 
 
 
@@ -393,6 +398,19 @@ public class ControlServlet extends HttpServlet {
 	        
 
 
+	    }
+	    
+	    private void payBill(HttpServletRequest request, HttpServletResponse response) 
+	    		throws SQLException, IOException, ServletException, ParseException {
+	    	int billId = Integer.parseInt(request.getParameter("id"));
+	    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+	    	Date paymentDate = format.parse(request.getParameter("date"));
+	    	
+	    	//send to sql here
+	    	BillsDAO.updateBills(billId, paymentDate);
+	    	
+	    	System.out.println("Bill with id: " + billId + " was payed on: " + paymentDate);
+	    	response.sendRedirect("activitypage.jsp");
 	    }
 	    
 	    protected void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {

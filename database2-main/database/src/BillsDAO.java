@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
+import java.sql.Timestamp;
 
 public class BillsDAO {
 	private static final long serialVersionUID = 1L;
@@ -43,6 +45,18 @@ public class BillsDAO {
   			      .getConnection("jdbc:mysql://127.0.0.1:3306/testdb?"
   			          + "useSSL=false&user=" + username + "&password=" + password);
             System.out.println(connect);
+        }
+    }
+    
+    public void updateBills(int id, Date paymentDate) throws SQLException {
+    	connect_func("root", "pass1234");
+        System.out.println("I am hereee updateQuotes");
+        String query = "UPDATE Quotes SET paymentDate = ? WHERE id = ?";
+        try (PreparedStatement pstmt = connect.prepareStatement(query)) {
+            pstmt.setTimestamp(1, new java.sql.Timestamp(paymentDate.getTime()));
+            pstmt.setInt(2, id);
+
+            pstmt.executeUpdate();
         }
     }
     
