@@ -170,7 +170,25 @@ public class QuotesDAO {
     }
     
     public List<Integer> getBadClients() throws SQLException {
-    	List<Integer> badClients = new ArrayList<>();
+    	connect_func("root", "pass1234");
+    	List<Integer> badClients = new ArrayList<>(); //need to edit to show clients instead of bills
+    	String sql = "select B.* " +
+    			"from Bills B " +
+    			"join Quotes Q on B.quoteid = Q.id " +
+    			"where B.paymentDate is NULL and B.paymentDate > DATE_ADD(Q.scheduleend, INTERVAL 7 DAY);";
+    			
+    	System.out.println("fetching bad clients.");
+    	try (PreparedStatement ps = connect.prepareStatement(sql);
+    			ResultSet rs = ps.executeQuery()) {
+    		while (rs.next()) {
+    			badClients.add(rs.getInt("id"));
+    		}
+    	} catch (SQLException e) {
+    		e.printStackTrace();
+    		throw e;
+    	}
+    	
+    	
     	return badClients;
     }
     

@@ -217,11 +217,15 @@ public class ControlServlet extends HttpServlet {
 	    
 	    private void OverdueBills(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException, SQLException{
 	    	System.out.println("OverdueBills method");
+	    	List<Integer> overdueBills = QuotesDAO.getOverdue();
+	    	request.setAttribute("overdueBills", overdueBills);
 	    	request.getRequestDispatcher("OverdueBills.jsp").forward(request, response);
 	    }
 	    
 	    private void BadClients(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException, SQLException{
 	    	System.out.println("BadClients method");
+	    	List<Integer> badClients = QuotesDAO.getBadClients();
+	    	request.setAttribute("badClients", badClients);
 	    	request.getRequestDispatcher("BadClients.jsp").forward(request, response);
 	    }
 	    

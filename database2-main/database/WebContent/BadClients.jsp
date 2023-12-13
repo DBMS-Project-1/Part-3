@@ -15,9 +15,20 @@
 </div>	
 	
 	
-    <center>
-        <h1>List</h1>
+    <div align="center">
+        <h1>Bad Clients List</h1>
+        
+        <table border="1" cellpadding="6">
+            <tr>
+                <th>Bill ID</th>
+            </tr>
+            <c:forEach var="id" items="${badClients}">
+                <tr style="text-align:center">
+                    <td><c:out value="${id}" /></td>
+                </tr>
+            </c:forEach>
+        </table>
 
-    </center>
+    </div>
 </body>
 </html>
