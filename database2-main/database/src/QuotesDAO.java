@@ -150,10 +150,11 @@ public class QuotesDAO {
     public List<Integer> getOverdue() throws SQLException {
     	connect_func("root", "pass1234");
     	List<Integer> overdueBills = new ArrayList<>();
-    	String sql = "select B.* " +
-    			"from Bills B " +
-    			"join Quotes Q on B.quoteid = Q.id " +
-    			"where B.paymentDate is NULL or B.paymentDate > DATE_ADD(Q.scheduleend, INTERVAL 7 DAY);";
+    	String sql =
+    			"select Bills.id " +
+    			"from Bills " +
+    			"join Quotes on Bills.quoteid = Quotes.id " +
+    			"where Bills.paymentDate is null or Bills.paymentDate > DATE_ADD(Quotes.scheduleend, INTERVAL 7 DAY);";
     			
     	try (PreparedStatement ps = connect.prepareStatement(sql);
     			ResultSet rs = ps.executeQuery()) {
@@ -175,7 +176,7 @@ public class QuotesDAO {
     	String sql = "select B.* " +
     			"from Bills B " +
     			"join Quotes Q on B.quoteid = Q.id " +
-    			"where B.amountPayed is NULL and B.paymentDate > DATE_ADD(Q.scheduleend, INTERVAL 7 DAY);";
+    			"where B.amountPaid is NULL and B.paymentDate > DATE_ADD(Q.scheduleend, INTERVAL 7 DAY);";
     			
     	System.out.println("fetching bad clients.");
     	try (PreparedStatement ps = connect.prepareStatement(sql);
