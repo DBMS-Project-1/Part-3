@@ -48,6 +48,81 @@ public class BillsDAO {
         }
     }
     
+    
+
+    public int insertBillIfAccepted(int quoteId, double amountDue) throws SQLException {
+    	System.out.println("insertBillIfAccepted method");
+        connect_func("root", "pass1234"); 
+        String query = "INSERT INTO Bills (quoteid, amountDue, amountPaid, paymentDate, billGeneratedDate) VALUES (?, ?, 0, NULL, NOW())";
+        int id = -1;
+
+
+        String checkAcceptanceQuery = "SELECT * FROM Quotes WHERE id = ? AND davidAccept = TRUE AND userAccept = TRUE";
+        
+        try (PreparedStatement pstmtCheck = connect.prepareStatement(checkAcceptanceQuery)) {
+            pstmtCheck.setInt(1, quoteId);
+            ResultSet rs = pstmtCheck.executeQuery();
+
+
+            if (rs.next()) {
+                try (PreparedStatement pstmtInsert = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+                    pstmtInsert.setInt(1, quoteId);
+                    pstmtInsert.setDouble(2, amountDue);
+
+                    int affectedRows = pstmtInsert.executeUpdate();
+
+                    if (affectedRows == 0) {
+                        throw new SQLException("Creating bill failed, no rows affected.");
+                    }
+
+                    try (ResultSet generatedKeys = pstmtInsert.getGeneratedKeys()) {
+                        if (generatedKeys.next()) {
+                            id = generatedKeys.getInt(1);
+                        } else {
+                            throw new SQLException("Creating bill failed, no ID obtained.");
+                        }
+                    }
+                }
+            }
+        }
+        System.out.println("The Bills generated id is: " + id);
+        return id;
+    }
+
+    
+    
+    
+    public List<Integer> getBadClients() throws SQLException {
+        connect_func("root", "pass1234");
+        List<Integer> badClients = new ArrayList<>();
+        String sql = "SELECT DISTINCT q.clientid " +
+                     "FROM Quotes q " +
+                     "JOIN Bills b ON q.id = b.quoteid " +
+                     "WHERE b.amountPaid = 0 " +
+                     "AND b.paymentDate > DATE_ADD(b.billGeneratedDate, INTERVAL 7 DAY);";
+
+        try (PreparedStatement ps = connect.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                badClients.add(rs.getInt("clientid"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return badClients;
+    }
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public void updateBills(int id, Date paymentDate) throws SQLException {
     	connect_func("root", "pass1234");
         System.out.println("I am hereee updateBills");

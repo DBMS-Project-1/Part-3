@@ -203,7 +203,25 @@ public class QuotesDAO {
     
     
     
-    
+
+    public double getPriceById(int quoteId) throws SQLException {
+        connect_func("root", "pass1234"); 
+        String query = "SELECT price FROM Quotes WHERE id = ?";
+        double price = 0.0;
+
+        try (PreparedStatement pstmt = connect.prepareStatement(query)) {
+            pstmt.setInt(1, quoteId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                price = rs.getDouble("price");
+            } else {
+                throw new SQLException("Quote with ID " + quoteId + " does not exist.");
+            }
+        }
+        return price; 
+    }
+
     
     protected void connect_func() throws SQLException {
     	//uses default connection to the database
@@ -285,6 +303,8 @@ public class QuotesDAO {
 
             pstmt.executeUpdate();
         }
+        
+        System.out.println("updateUserReply method completed");
     }
     
     public void updateDavidReply(int id, Boolean isAccepted, String Reply) throws SQLException {
@@ -298,6 +318,8 @@ public class QuotesDAO {
 
             pstmt.executeUpdate();
         }
+        
+        System.out.println("updateDavidReply method completed");
     }
 
 

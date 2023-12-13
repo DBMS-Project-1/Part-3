@@ -9,22 +9,20 @@
     <title>Bad Clients</title>
 </head>
 <body>
-	<div align = "center">	
-<h1>Bad Clients</h1>
-
-</div>	
-	
-	
+    <div align="center">  
+        <h1>Bad Clients</h1>
+    </div>  
+    
     <div align="center">
         <h1>Bad Clients List</h1>
         
         <table border="1" cellpadding="6">
             <tr>
-                <th>Bill ID</th>
+                <th>Client ID</th>
             </tr>
-            <c:forEach var="id" items="${badClients}">
+            <c:forEach var="clientid" items="${badClients}">
                 <tr style="text-align:center">
-                    <td><c:out value="${id}" /></td>
+                    <td><c:out value="${clientid}" /></td>
                 </tr>
             </c:forEach>
         </table>

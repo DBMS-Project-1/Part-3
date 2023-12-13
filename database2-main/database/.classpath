@@ -16,6 +16,10 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="/Users/rorylange/Desktop/project4710Part3/Part-3/database2-main/mysql-connector-java-8.0.13.jar"/>
+	<classpathentry kind="lib" path="/Users/rorylange/Desktop/project4710Part3/Part-3/database2-main/mysql-connector-java-8.0.13.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

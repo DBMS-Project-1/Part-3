@@ -224,7 +224,7 @@ public class ControlServlet extends HttpServlet {
 	    
 	    private void BadClients(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException, SQLException{
 	    	System.out.println("BadClients method");
-	    	List<Integer> badClients = QuotesDAO.getBadClients();
+	    	List<Integer> badClients = BillsDAO.getBadClients();
 	    	request.setAttribute("badClients", badClients);
 	    	request.getRequestDispatcher("BadClients.jsp").forward(request, response);
 	    }
@@ -249,51 +249,50 @@ public class ControlServlet extends HttpServlet {
 	    
 	    
 	    private void insertUserReply(HttpServletRequest request, HttpServletResponse response) 
-	    		throws SQLException, IOException, ServletException, ParseException {
-	    	
-	    	int id = Integer.parseInt(request.getParameter("id"));
+	            throws SQLException, IOException, ServletException, ParseException {
+	        
+	        int id = Integer.parseInt(request.getParameter("id"));
 	        String acceptOrDeny = request.getParameter("acceptOrDeny");
 
-	        boolean isAccepted;
-	       
-	        if (acceptOrDeny.equals("accept")) {
-	        	isAccepted = true;
-	        }
-	        else {
-	        	isAccepted = false;
-	        }
-	        
+	        boolean isAccepted = acceptOrDeny.equals("accept");
 	        String Reply = request.getParameter("userReply");
 	        System.out.println("Accept or deny quote: " + acceptOrDeny + ". Reply: " + Reply);
 
 	        QuotesDAO.updateDavidReply(id, isAccepted, Reply);
-	        response.sendRedirect("davidSmith.jsp");
+	        System.out.println("updateDavidReply done");
+	        double amountDue = QuotesDAO.getPriceById(id);
+	        System.out.println("Amount due: " + amountDue );
+	        if (isAccepted) {
+	        	System.out.println("insertUserReply accepted");
+	            BillsDAO.insertBillIfAccepted(id, amountDue);
+	        }
 
+	        response.sendRedirect("davidSmith.jsp");
 	    }
-	    
+
 	    private void insertDavidReply(HttpServletRequest request, HttpServletResponse response) 
-	    		throws SQLException, IOException, ServletException, ParseException {
-	    	
-	    	int id = Integer.parseInt(request.getParameter("id"));
+	            throws SQLException, IOException, ServletException, ParseException {
+	        
+	        int id = Integer.parseInt(request.getParameter("id"));
 	        String acceptOrDeny = request.getParameter("acceptOrDeny");
 
-	        boolean isAccepted;
-	       
-	        if (acceptOrDeny.equals("accept")) {
-	        	isAccepted = true;
-	        }
-	        else {
-	        	isAccepted = false;
-	        }
-	        
+	        boolean isAccepted = acceptOrDeny.equals("accept");
 	        String Reply = request.getParameter("davidReply");
 	        System.out.println("Accept or deny quote: " + acceptOrDeny + ". Reply: " + Reply);
 
 	        QuotesDAO.updateUserReply(id, isAccepted, Reply);
+	        System.out.println("updateUserReply done");
+	        double amountDue = QuotesDAO.getPriceById(id);
+	        System.out.println("Amount due: " + amountDue );
+	        
+	        if (isAccepted) {
+	        	System.out.println("insertDavidReply accepted");
+	            BillsDAO.insertBillIfAccepted(id, amountDue);
+	        }
+
 	        response.sendRedirect("activitypage.jsp");
-
-
 	    }
+
 	    
 	    
 	    private void listUserQuote(HttpServletRequest request, HttpServletResponse response)

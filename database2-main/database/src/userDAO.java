@@ -289,7 +289,6 @@ public class userDAO
                 "drop database if exists testdb; ",
                 "create database testdb; ",
                 "use testdb; ",
-                //"drop table if exists Users; ", //shouldnt need this because dropping database should delete everything
                 ("CREATE TABLE if not exists Users( " +
                         "id INTEGER AUTO_INCREMENT PRIMARY KEY, " +
                         "firstName VARCHAR(50), " +
@@ -325,15 +324,17 @@ public class userDAO
                         "distanceFromHouse DOUBLE," +
                 		"FOREIGN KEY (quoteid) references Quotes(id)" +
                         ");"),
-                ("CREATE TABLE if not exists Bills( " +
-                        "id integer auto_increment primary key, " +
-                		"quoteid integer," + 
-                        "amountDue double," + 
-                		"amountPaid double," +
-                        "paymentDate datetime," + 
-                		"billGeneratedDate datetime," + 
-                        "foreign key(quoteid) references Quotes(id)" +
+                
+                ("CREATE TABLE if not exists Bills (" +
+                		"id INTEGER AUTO_INCREMENT PRIMARY KEY," +
+                		"quoteid INTEGER," +
+                		"amountDue DOUBLE," +
+                		"amountPaid DOUBLE," +
+                		"paymentDate DATETIME," +
+                		"billGeneratedDate DATETIME," +
+                		"FOREIGN KEY(quoteid) REFERENCES Quotes(id)" +
                 		");")
+               
                 
         };
 
