@@ -35,6 +35,9 @@
             <input type="submit" value="Submit Quote">
         </form>
         
+        <h1>My Bills</h1>
+        <!-- list bills here -->
+        
         <h1>Pay a bill</h1>
         <form action="payBill" method="post">
         	<label for="bill">Bill ID:</label>

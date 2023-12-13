@@ -150,8 +150,22 @@ public class QuotesDAO {
     public List<Integer> getOverdue() throws SQLException {
     	connect_func("root", "pass1234");
     	List<Integer> overdueBills = new ArrayList<>();
-    	//String sql = "select Bills.id, Bills.billGeneratedDate as dateGenerated from Bills " +
+    	String sql = "select B.* " +
+    			"from Bills B " +
+    			"join Quotes Q on B.quoteid = Q.id " +
+    			"where B.paymentDate is NULL or B.paymentDate > DATE_ADD(Q.scheduleend, INTERVAL 7 DAY);";
     			
+    	try (PreparedStatement ps = connect.prepareStatement(sql);
+    			ResultSet rs = ps.executeQuery()) {
+    		while (rs.next()) {
+    			overdueBills.add(rs.getInt("id"));
+    		}
+    	} catch (SQLException e) {
+    		e.printStackTrace();
+    		throw e;
+    	}
+    	
+    	
     	return overdueBills;
     }
     
