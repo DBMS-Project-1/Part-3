@@ -231,6 +231,8 @@ public class ControlServlet extends HttpServlet {
 	    
 	    private void GoodClients(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException, SQLException{
 	    	System.out.println("GoodClients method");
+	    	List<Integer> goodClients = QuotesDAO.getGoodClients();
+	    	request.setAttribute("goodClients", goodClients);
 	    	request.getRequestDispatcher("GoodClients.jsp").forward(request, response);
 	    }
 	    
