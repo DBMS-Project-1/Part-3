@@ -60,7 +60,7 @@ public class QuotesDAO {
         List<Integer> easyClients = new ArrayList<>();
         String sql = "SELECT clientid FROM Quotes " +
                      "WHERE contractorid = (SELECT id FROM Users WHERE firstname = 'David' AND lastname = 'Smith') " +
-                     "AND userAccept = TRUE AND userResponse IS NULL;";
+                     "AND userAccept = TRUE AND userResponse = '';";
 
         try (PreparedStatement ps = connect.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -74,6 +74,7 @@ public class QuotesDAO {
         }
         return easyClients;
     }
+
 
     
     public List<Integer> getOneTreeQuotes() throws SQLException {
