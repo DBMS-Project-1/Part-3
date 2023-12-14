@@ -159,6 +159,11 @@ public class ControlServlet extends HttpServlet {
         		System.out.println("Statistics clicked!");
         		Statistics(request,response,"");
         		break;
+        	
+ 	    	case "/payBillPage":
+        		System.out.println("payBillPage clicked!");
+        		payBillPage(request,response);
+        		break;
         		
 	    	}
         	
@@ -166,6 +171,22 @@ public class ControlServlet extends HttpServlet {
 	    catch(Exception ex) {
         	System.out.println(ex.getMessage());
 	    	}
+	    }
+	    
+	    
+	    private void payBillPage(HttpServletRequest request, HttpServletResponse response)
+	            throws SQLException, IOException, ServletException {
+	        System.out.println("payBillPage started: 00000000000000000000000000000000000");
+	        int id = userDAO.getUserByEmail(currentUser);
+	        System.out.println(id);
+	        
+	        List<Bills> listBills = BillsDAO.listUserBills(id);
+	        request.setAttribute("listBill", listBills);      
+	        
+	        RequestDispatcher dispatcher = request.getRequestDispatcher("payBillsPage.jsp");       
+	        dispatcher.forward(request, response);
+	     
+	        System.out.println("payBillPage finished: 111111111111111111111111111111111111");
 	    }
 	    
 	    
@@ -238,7 +259,11 @@ public class ControlServlet extends HttpServlet {
 	    
 	    private void Statistics(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException, SQLException{
 	    	System.out.println("Statistics method");
-	    	request.getRequestDispatcher("Statistics.jsp").forward(request, response);
+	    	List<Bills> statisticsList = BillsDAO.getStatistics();
+	    	request.setAttribute("statisticsList", statisticsList);
+	    	RequestDispatcher dispatcher = request.getRequestDispatcher("Statistics.jsp");
+	    	dispatcher.forward(request, response);
+
 	    }
 	    
 	    

@@ -14,6 +14,10 @@
 	<form action = "listDavidQuote" method="post">
 		<input type = "submit" value = "List David Reply"/>
 	</form>
+	
+		<form action = "payBillPage" method="post">
+		<input type = "submit" value = "Pay a Bill"/>
+	</form>
 
 	<a href="login.jsp"target ="_self" > logout</a><br><br> 
 </div>	
@@ -35,18 +39,6 @@
             <input type="submit" value="Submit Quote">
         </form>
         
-        <h1>My Bills</h1>
-        <!-- list bills here -->
-        
-        <h1>Pay a bill</h1>
-        <form action="payBill" method="post">
-        	<label for="bill">Bill ID:</label>
-        	<input type="number" id="billId" name="id" required><br><br>
-        	<label for="bill">Payment Date:</label>
-        	<input type="datetime" id="paymentDate" name="date" required><br><br>
-        	
-        	<input type="submit" value="Submit Payment">
-        </form>
         
         </div>
     

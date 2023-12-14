@@ -49,6 +49,45 @@ public class BillsDAO {
     }
     
     
+    public List<Bills> listUserBills(int userId) throws SQLException {
+        List<Bills> listBill = new ArrayList<>();
+        String sql = "SELECT * FROM Bills WHERE quoteid = ?";
+        connect_func();
+        preparedStatement = connect.prepareStatement(sql);
+        preparedStatement.setInt(1, userId);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        while (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            int quoteId = resultSet.getInt("quoteid");
+            double amountDue = resultSet.getDouble("amountDue");
+            double amountPaid = resultSet.getDouble("amountPaid");
+
+            Timestamp paymentDateTimestamp = resultSet.getTimestamp("paymentDate");
+            Timestamp billGeneratedDateTimestamp = resultSet.getTimestamp("billGeneratedDate");
+
+            java.util.Date paymentDate = null;
+            java.util.Date billGeneratedDate = null;
+
+            if (paymentDateTimestamp != null) {
+                paymentDate = new java.util.Date(paymentDateTimestamp.getTime());
+            }
+
+            if (billGeneratedDateTimestamp != null) {
+                billGeneratedDate = new java.util.Date(billGeneratedDateTimestamp.getTime());
+            }
+
+            Bills bill = new Bills(id, quoteId, amountDue, amountPaid, paymentDate, billGeneratedDate);
+            listBill.add(bill);
+        }
+
+        resultSet.close();
+        preparedStatement.close();
+        disconnect();
+
+        return listBill;
+    }
+
 
     public int insertBillIfAccepted(int quoteId, double amountDue) throws SQLException {
     	System.out.println("insertBillIfAccepted method");
@@ -89,7 +128,52 @@ public class BillsDAO {
         return id;
     }
 
-    
+    public List<Bills> getStatistics() throws SQLException {
+        connect_func("root", "pass1234"); // Connect to the database
+        List<Bills> billsList = new ArrayList<>();
+        String sql = "SELECT " +
+                     "u.id AS client_id, " +
+                     "u.firstname, " +
+                     "u.lastname, " +
+                     "COUNT(t.id) AS total_trees_cut, " +
+                     "SUM(b.amountDue) AS total_due_amount, " +
+                     "SUM(b.amountPaid) AS total_paid_amount, " +
+                     "q.scheduleend AS work_done_date " +
+                     "FROM Users u " +
+                     "JOIN Quotes q ON u.id = q.clientid " +
+                     "JOIN Trees t ON q.id = t.quoteid " +
+                     "JOIN Bills b ON q.id = b.quoteid " +
+                     "WHERE q.userAccept = TRUE " +
+                     "AND q.davidAccept = TRUE " +
+                     "AND q.scheduleend < CURRENT_DATE() " +
+                     "GROUP BY u.id, q.scheduleend " +
+                     "ORDER BY u.id, q.scheduleend;";
+
+        try (PreparedStatement ps = connect.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Bills bill = new Bills(
+                    rs.getInt("client_id"),
+                    rs.getString("firstname"),
+                    rs.getString("lastname"),
+                    rs.getInt("total_trees_cut"),
+                    rs.getDouble("total_due_amount"),
+                    rs.getDouble("total_paid_amount"),
+                    rs.getDate("work_done_date")
+                );
+                billsList.add(bill);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return billsList;
+    }
+
+
+
+
     
     
     public List<Integer> getBadClients() throws SQLException {
