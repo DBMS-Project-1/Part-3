@@ -433,11 +433,12 @@ public class ControlServlet extends HttpServlet {
 	    private void payBill(HttpServletRequest request, HttpServletResponse response) 
 	    		throws SQLException, IOException, ServletException, ParseException {
 	    	int billId = Integer.parseInt(request.getParameter("id"));
+	    	double amountPaid = Integer.parseInt(request.getParameter("amountPaid"));
 	    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 	    	Date paymentDate = format.parse(request.getParameter("date"));
 	    	
 	    	//send to sql here
-	    	BillsDAO.updateBills(billId, paymentDate);
+	    	BillsDAO.updateBills(billId, amountPaid, paymentDate);
 	    	
 	    	System.out.println("Bill with id: " + billId + " was payed on: " + paymentDate);
 	    	response.sendRedirect("activitypage.jsp");
