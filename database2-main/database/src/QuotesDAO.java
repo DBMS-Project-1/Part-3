@@ -60,7 +60,7 @@ public class QuotesDAO {
         List<Integer> easyClients = new ArrayList<>();
         String sql = "SELECT clientid FROM Quotes " +
                      "WHERE contractorid = (SELECT id FROM Users WHERE firstname = 'David' AND lastname = 'Smith') " +
-                     "AND userAccept = TRUE AND userResponse IS NULL;";
+                     "AND userAccept = TRUE AND userResponse = '';";
 
         try (PreparedStatement ps = connect.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -75,20 +75,33 @@ public class QuotesDAO {
         return easyClients;
     }
 
+
     
     public List<Integer> getOneTreeQuotes() throws SQLException {
         connect_func("root", "pass1234");
         List<Integer> oneTreeQuotes = new ArrayList<>();
-        String sql = "SELECT Quotes.id FROM Quotes " +
-                     "JOIN Trees ON Quotes.id = Trees.quoteid " +
-                     "WHERE userAccept = TRUE AND davidAccept = TRUE " +
-                     "GROUP BY Quotes.id HAVING COUNT(Trees.id) = 1;";
+        String sql = "SELECT Q.clientid " +
+                     "FROM (" +
+                         "SELECT clientid " +
+                         "FROM Quotes " +
+                         "WHERE userAccept = 1 AND davidAccept = 1 " +
+                         "GROUP BY clientid " +
+                         "HAVING COUNT(*) = 1" +
+                     ") C " +
+                     "JOIN Quotes Q ON C.clientid = Q.clientid " +
+                     "JOIN (" +
+                         "SELECT quoteid " +
+                         "FROM Trees " +
+                         "GROUP BY quoteid " +
+                         "HAVING COUNT(*) = 1" +
+                     ") T ON Q.id = T.quoteid " +
+                     "WHERE Q.userAccept = 1 AND Q.davidAccept = 1;";
 
         try (PreparedStatement ps = connect.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                oneTreeQuotes.add(rs.getInt("id"));
+                oneTreeQuotes.add(rs.getInt("clientid"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -96,6 +109,9 @@ public class QuotesDAO {
         }
         return oneTreeQuotes;
     }
+
+
+
 
 
     public List<Integer> getProspectiveClients() throws SQLException {
@@ -120,24 +136,17 @@ public class QuotesDAO {
     public List<Integer> getHighestTrees() throws SQLException {
         connect_func("root", "pass1234");
         List<Integer> highestTrees = new ArrayList<>();
-        String sql = "SELECT Trees.id, MAX(height) AS maxHeight FROM Trees " +
+        String sql = "SELECT Trees.id " +
+                     "FROM Trees " +
                      "JOIN Quotes ON Trees.quoteid = Quotes.id " +
-                     "WHERE contractorid = (SELECT id FROM Users WHERE firstname = 'David' AND lastname = 'Smith') " +
-                     "AND davidAccept = TRUE GROUP BY Trees.id;";
+                     "WHERE Trees.height = (SELECT MAX(height) FROM Trees) " +
+                     "AND Quotes.scheduleend < CURDATE();";
 
         try (PreparedStatement ps = connect.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
-            double maxHeight = 0;
             while (rs.next()) {
-                double height = rs.getDouble("maxHeight");
-                if (maxHeight < height) {
-                    highestTrees.clear();
-                    maxHeight = height;
-                }
-                if (height == maxHeight) {
-                    highestTrees.add(rs.getInt("id"));
-                }
+                highestTrees.add(rs.getInt("id"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -145,6 +154,7 @@ public class QuotesDAO {
         }
         return highestTrees;
     }
+
 
     
     public List<Integer> getOverdue() throws SQLException {

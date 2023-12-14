@@ -14,7 +14,7 @@
         <h2>List of One Tree Quotes</h2>
         <table border="1" cellpadding="6">
             <tr>
-                <th>Quote ID</th>
+                <th>Client ID</th>
             </tr>
             <c:forEach var="quote" items="${oneTreeQuotes}">
                 <tr style="text-align:center">
