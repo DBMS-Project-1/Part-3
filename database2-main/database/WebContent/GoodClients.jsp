@@ -20,7 +20,7 @@
         
                 <table border="1" cellpadding="6">
             <tr>
-                <th>Client ID</th>
+                <th>Bill ID</th>
             </tr>
             <c:forEach var="id" items="${goodClients}">
                 <tr style="text-align:center">

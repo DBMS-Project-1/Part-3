@@ -173,8 +173,8 @@ public class QuotesDAO {
     public List<Integer> getBadClients() throws SQLException {
     	connect_func("root", "pass1234");
     	List<Integer> badClients = new ArrayList<>(); //need to edit to show clients instead of bills
-    	String sql = "select B.* " +
-    			"from Bills B " +
+    	String sql = "SELECT DISTINCT Q.clientid" +
+    			"FROM Quotes Q" +
     			"join Quotes Q on B.quoteid = Q.id " +
     			"where B.amountPaid is NULL and B.paymentDate > DATE_ADD(Q.scheduleend, INTERVAL 7 DAY);";
     			
@@ -196,8 +196,8 @@ public class QuotesDAO {
     public List<Integer> getGoodClients() throws SQLException {
     	connect_func("root", "pass1234");
     	List<Integer> goodClients = new ArrayList<>(); //need to edit to show clients instead of bills
-    	String sql = "select B.* " +
-    			"from Bills B " +
+    	String sql = "SELECT DISTINCT Q.clientid" +
+    			"FROM Quotes Q" +
     			"join Quotes Q on B.quoteid = Q.id " +
     			"where B.amountPaid = B.amountDue and B.paymentDate < DATE_ADD(Q.scheduleend, INTERVAL 1 DAY);";
     			
