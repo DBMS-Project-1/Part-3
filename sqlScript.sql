@@ -1,6 +1,6 @@
+drop database if exists testdb;
+create database testdb;
 use testdb;
-drop table Trees; 
-drop table Quotes;
 
 CREATE TABLE Users(
 	id INTEGER AUTO_INCREMENT PRIMARY KEY,
@@ -61,14 +61,10 @@ VALUES
 	(18, 'William', 'Moore', '8888999900001111', 'william1234', 'william.moore@example.com'),
 	(19, 'Emily', 'Clark', '9999000011112222', 'emily1234', 'emily.clark@example.com');
 
-insert into Quotes(contractorid, clientid) values
-(2, 4);
-insert into Trees(quoteid) values
-(4);
-
 select * from Users;  
 select * from Trees;
 select * from Quotes;   
+select * from Bills;  
 
 drop table Trees; 
 drop table Quotes;
