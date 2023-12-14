@@ -136,24 +136,17 @@ public class QuotesDAO {
     public List<Integer> getHighestTrees() throws SQLException {
         connect_func("root", "pass1234");
         List<Integer> highestTrees = new ArrayList<>();
-        String sql = "SELECT Trees.id, MAX(height) AS maxHeight FROM Trees " +
+        String sql = "SELECT Trees.id " +
+                     "FROM Trees " +
                      "JOIN Quotes ON Trees.quoteid = Quotes.id " +
-                     "WHERE contractorid = (SELECT id FROM Users WHERE firstname = 'David' AND lastname = 'Smith') " +
-                     "AND davidAccept = TRUE GROUP BY Trees.id;";
+                     "WHERE Trees.height = (SELECT MAX(height) FROM Trees) " +
+                     "AND Quotes.scheduleend < CURDATE();";
 
         try (PreparedStatement ps = connect.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
-            double maxHeight = 0;
             while (rs.next()) {
-                double height = rs.getDouble("maxHeight");
-                if (maxHeight < height) {
-                    highestTrees.clear();
-                    maxHeight = height;
-                }
-                if (height == maxHeight) {
-                    highestTrees.add(rs.getInt("id"));
-                }
+                highestTrees.add(rs.getInt("id"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -161,6 +154,7 @@ public class QuotesDAO {
         }
         return highestTrees;
     }
+
 
     
     public List<Integer> getOverdue() throws SQLException {
